@@ -7,7 +7,7 @@ The backups will be placed in the databases source folder, with a maximum of 5 b
 SimpleDatabaseBackup is fully cross-platform compatible.
 
 # Can I change the number of backups ?
-At the moment it it hard-coded in the sources, but you may follow the excellent documentation on the KeePass website and build your own customized plugin. The other way could be to create an issue here and I probably add this freature request.
+At the moment it it hard-coded in the sources, but you may follow the excellent documentation on the KeePass website and build your own customized plugin. On the other hand you can create an issue here and I probably add this freature request.
 
 # Further information
 This plugin is heavily based on the DatabaseBackup plugin from Francis Noël which you can find here: http://keepass.info/plugins.html#databasebackup
