@@ -36,7 +36,7 @@ namespace SimpleDatabaseBackup
 
         public override string UpdateUrl
         {
-            get { return "https://github.com/jnko/SimpleDatabaseBackup/SimpleDatabaseBackupVERSION.txt"; }
+            get { return "https://raw.githubusercontent.com/jnko/SimpleDatabaseBackup/master/SimpleDatabaseBackupVERSION.txt"; }
         }
 
         public override bool Initialize(IPluginHost host)
