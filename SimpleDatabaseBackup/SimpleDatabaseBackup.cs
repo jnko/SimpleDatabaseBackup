@@ -34,6 +34,11 @@ namespace SimpleDatabaseBackup
         private int NumberOfBackups = 5;    // This is the maximum number of backups to create for each opened database.
         private IPluginHost m_host = null;
 
+        public override string UpdateUrl
+        {
+            get { return "https://github.com/jnko/SimpleDatabaseBackup/SimpleDatabaseBackupVERSION.txt"; }
+        }
+
         public override bool Initialize(IPluginHost host)
         {
             m_host = host;
@@ -135,93 +140,95 @@ namespace SimpleDatabaseBackup
             //Thats the way we do it!
             if (e.Database.IsOpen)
             {
-                string SourceFile = string.Empty;
-                string SourceFileName = string.Empty;
-                string BackupFile = string.Empty;
-                SourceFileName = GetSourceFileName(e);
-                if (e.Database.IOConnectionInfo.IsLocalFile())
-                {
-                    SourceFile = e.Database.IOConnectionInfo.Path;
-                }
-                else
-                {
-                    // remote file
-                    SourceFile = Path.GetTempFileName();
-
-                    var wc = new WebClient();
-
-                    wc.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
-
-                    if ((e.Database.IOConnectionInfo.UserName.Length > 0) || (e.Database.IOConnectionInfo.Password.Length > 0))
+                if (e.Database.Modified) { 
+                    string SourceFile = string.Empty;
+                    string SourceFileName = string.Empty;
+                    string BackupFile = string.Empty;
+                    SourceFileName = GetSourceFileName(e);
+                    if (e.Database.IOConnectionInfo.IsLocalFile())
                     {
-                        wc.Credentials = new NetworkCredential(e.Database.IOConnectionInfo.UserName, e.Database.IOConnectionInfo.Password);
+                        SourceFile = e.Database.IOConnectionInfo.Path;
+                    }
+                    else
+                    {
+                        // remote file
+                        SourceFile = Path.GetTempFileName();
+
+                        var wc = new WebClient();
+
+                        wc.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
+
+                        if ((e.Database.IOConnectionInfo.UserName.Length > 0) || (e.Database.IOConnectionInfo.Password.Length > 0))
+                        {
+                            wc.Credentials = new NetworkCredential(e.Database.IOConnectionInfo.UserName, e.Database.IOConnectionInfo.Password);
+                        }
+
+                        wc.DownloadFile(e.Database.IOConnectionInfo.Path, SourceFile);
+                        wc.Dispose();
+                        wc = null;
                     }
 
-                    wc.DownloadFile(e.Database.IOConnectionInfo.Path, SourceFile);
-                    wc.Dispose();
-                    wc = null;
-                }
-
-                // read log file
-                string destPath = Path.GetDirectoryName(e.Database.IOConnectionInfo.GetDisplayName()); // Destination backup folder is KeePass.exe directory
-                string BackupLogFile = destPath + "/" + GetLogFileName(e);
-                string[] LogFile = null;
-                if (File.Exists(BackupLogFile))
-                {
-                    LogFile = File.ReadAllLines(BackupLogFile);
-                }
-
-                if (Directory.Exists(destPath))
-                {
-                    // create file
-                    BackupFile = destPath + "/" + SourceFileName + "_" + DateTime.Now.ToString("dd-MMMM-yyyy-hh-mm-ss") + ".kdbx";
-                    File.Copy(SourceFile, BackupFile, true);
-
-                    // delete extra file
-                    if (LogFile != null)
+                    // read log file
+                    string destPath = Path.GetDirectoryName(e.Database.IOConnectionInfo.GetDisplayName()); // Destination backup folder is KeePass.exe directory
+                    string BackupLogFile = destPath + "/" + GetLogFileName(e);
+                    string[] LogFile = null;
+                    if (File.Exists(BackupLogFile))
                     {
-                        if (LogFile.Length + 1 > NumberOfBackups)
+                        LogFile = File.ReadAllLines(BackupLogFile);
+                    }
+
+                    if (Directory.Exists(destPath))
+                    {
+                        // create file
+                        BackupFile = destPath + "/" + SourceFileName + "_" + DateTime.Now.ToString("dd-MMMM-yyyy-hh-mm-ss") + ".kdbx";
+                        File.Copy(SourceFile, BackupFile, true);
+
+                        // delete extra file
+                        if (LogFile != null)
                         {
-                            for (int LoopDelete = NumberOfBackups - 1; LoopDelete < LogFile.Length; LoopDelete++)
+                            if (LogFile.Length + 1 > NumberOfBackups)
                             {
-                                if (File.Exists(LogFile[LoopDelete]))
+                                for (int LoopDelete = NumberOfBackups - 1; LoopDelete < LogFile.Length; LoopDelete++)
                                 {
-                                    File.Delete(LogFile[LoopDelete]);
+                                    if (File.Exists(LogFile[LoopDelete]))
+                                    {
+                                        File.Delete(LogFile[LoopDelete]);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    // write log file
-                    TextWriter fLog = new StreamWriter(BackupLogFile, false);
-                    fLog.WriteLine(BackupFile);
-                    if (LogFile != null)
+                        // write log file
+                        TextWriter fLog = new StreamWriter(BackupLogFile, false);
+                        fLog.WriteLine(BackupFile);
+                        if (LogFile != null)
+                        {
+                            var LoopMax = (uint)LogFile.Length;
+                            if (LoopMax > NumberOfBackups)
+                            {
+                                LoopMax = (uint)NumberOfBackups;
+                            }
+
+                            for (uint i = 0; i < LoopMax; i++)
+                            {
+                                fLog.WriteLine(LogFile[i]);
+                            }
+                        }
+
+                        fLog.Close();
+                        fLog.Dispose();
+                        fLog = null;
+                    }
+                    else
                     {
-                        var LoopMax = (uint)LogFile.Length;
-                        if (LoopMax > NumberOfBackups)
-                        {
-                            LoopMax = (uint)NumberOfBackups;
-                        }
-
-                        for (uint i = 0; i < LoopMax; i++)
-                        {
-                            fLog.WriteLine(LogFile[i]);
-                        }
+                        MessageBox.Show("Backupfolder not found  : " + destPath);
                     }
 
-                    fLog.Close();
-                    fLog.Dispose();
-                    fLog = null;
-                }
-                else
-                {
-                    MessageBox.Show("Backupfolder not found  : " + destPath);
-                }
-
-                // delete temp remote file
-                if (!e.Database.IOConnectionInfo.IsLocalFile())
-                {
-                    File.Delete(SourceFile);
+                    // delete temp remote file
+                    if (!e.Database.IOConnectionInfo.IsLocalFile())
+                    {
+                        File.Delete(SourceFile);
+                    }
                 }
             }
             else
