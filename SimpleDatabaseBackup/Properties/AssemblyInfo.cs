@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
 [assembly: AssemblyTitle("SimpleDatabaseBackup")]
-[assembly: AssemblyDescription("A simple database  backup solution. It creates max. 5 backups on every save trigger for each opened db in the databases source folder. No setup, no configuration. This plugin was made for simpleness and is fully cross-platform compatible. (https://github.com/jnko/SimpleDatabaseBackup)")]
+[assembly: AssemblyDescription("A simple database  backup solution. It creates max. 5 backups on every save trigger for each opened and modified db in the databases source folder. No setup, no configuration. This plugin was made for simpleness and is fully cross-platform compatible. (https://github.com/jnko/SimpleDatabaseBackup)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("KeePass Plugin")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.2.0")]
-[assembly: AssemblyFileVersion("1.0.2.0")]
+[assembly: AssemblyVersion("1.0.3")]
+[assembly: AssemblyFileVersion("1.0.3")]
