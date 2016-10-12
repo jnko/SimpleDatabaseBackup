@@ -6,6 +6,10 @@ It will create a backup for every opened KeePass database (.kdbx) every time a d
 The backups will be placed in the databases source folder, with a maximum of 5 backups. The backups will be rotated. A logfile keeps track of the backups.
 SimpleDatabaseBackup is fully cross-platform compatible.
 
+# Download
+The compiled plugin can be downloaded here: 
+https://github.com/jnko/SimpleDatabaseBackup/blob/master/SimpleDatabaseBackup.plgx
+
 # Can I change the number of backups ?
 At the moment it it hard-coded in the sources, but you may follow the excellent documentation on the KeePass website and build your own customized plugin. On the other hand you can create an issue here and I probably add this freature request.
 
@@ -16,3 +20,7 @@ There is no license or copyright information left in the sources so I hope Frani
 I created this small plugin because I use KeePass daily with one personal and one shared business database. 
 Even not enough on I need to do this on cross-platform operating systems every day. People tend to make mistakes from time to time. That is the right moment for backups.
 At the time I only used Windows with Francis DatabaseBackup plugin everything was fine, but since I need to switch between Win, macOS and Linux I realized that Francis plugin doesn't play nicely in this scenario. It even has some serious bugs when using multiple databases.
+
+# History
+1.0.3 Added KeePass update notifications; A database will be backed-up only when modified.
+1.0.1 First public release.
