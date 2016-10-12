@@ -8,6 +8,7 @@ SimpleDatabaseBackup is fully cross-platform compatible.
 
 # Download
 The compiled plugin can be downloaded here: 
+
 https://github.com/jnko/SimpleDatabaseBackup/raw/master/SimpleDatabaseBackup.plgx
 
 # Can I change the number of backups ?
