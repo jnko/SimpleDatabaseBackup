@@ -12,7 +12,7 @@ The compiled plugin can be downloaded here:
 https://github.com/jnko/SimpleDatabaseBackup/raw/master/SimpleDatabaseBackup.plgx
 
 # Can I change the number of backups ?
-At the moment it it hard-coded in the sources, but you may follow the excellent documentation on the KeePass website and build your own customized plugin. On the other hand you can create an issue here and I probably add this freature request.
+At the time of writing this it is hard-coded in the sources, but you may follow the excellent documentation on the KeePass website and build your own customized plugin. On the other hand you can create an issue here and if there is some need from the users I will add this freature request.
 
 # Further information
 This plugin is heavily based on the DatabaseBackup plugin written by Francis Noël which you can find here: 
