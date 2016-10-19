@@ -43,9 +43,16 @@ namespace SimpleDatabaseBackup
         {
             m_host = host;
 
-            // We want a notification when the user tried to save the
-            // current database
-           m_host.MainWindow.FileSaved += this.OnFileSaved;
+            //I want a notification when the user saved the current database
+            //m_host.MainWindow.FileSaved += this.OnFileSaved;
+            //up to 1.0.3: I made a logical mistake.
+            //The FileSaved event event here notifes us when the file has been saved. So this makes absolutely no sense to test for Database.Modified inside because the file 
+            //has been saved already and thus the Modified property must ALWAYS be false.
+
+            //I want a notification before the file is being saved. This way the Database.Modified property is either true or false.
+            //The Backup will be made before the databse is saved.
+            m_host.MainWindow.FileSaving += this.OnFileSaving;
+
 
             return true;
         }
@@ -53,11 +60,11 @@ namespace SimpleDatabaseBackup
         public override void Terminate()
         {
             // Important! Remove event handlers!
-            this.m_host.MainWindow.FileSaved -= this.OnFileSaved;
+            this.m_host.MainWindow.FileSaving -= this.OnFileSaving;
         }
 
 
-        public static string GetSourceFileName(FileSavedEventArgs e)
+        public static string GetSourceFileName(FileSavingEventArgs e)
         {
             string SourceFileName = string.Empty;
             if (e.Database.IOConnectionInfo.IsLocalFile())
@@ -103,7 +110,7 @@ namespace SimpleDatabaseBackup
             return SourceFileName;
         }
 
-        public static string GetLogFileName(FileSavedEventArgs e)
+        public static string GetLogFileName(FileSavingEventArgs e)
         {
             string SourceFileName = string.Empty;
             if (e.Database.IOConnectionInfo.IsLocalFile())
@@ -135,12 +142,15 @@ namespace SimpleDatabaseBackup
             return SourceFileName + "_log";
         }
 
-        private void OnFileSaved(object sender, FileSavedEventArgs e)
+        private void OnFileSaving(object sender, FileSavingEventArgs e)
         {
             //Thats the way we do it!
             if (e.Database.IsOpen)
             {
-                if (e.Database.Modified) { 
+                //MessageBox.Show("Database is open.");
+                //MessageBox.Show("Database mod: " + e.Database.Modified);
+                if (e.Database.Modified) {
+                    //MessageBox.Show("Database is modified. " + e.Database.Modified);
                     string SourceFile = string.Empty;
                     string SourceFileName = string.Empty;
                     string BackupFile = string.Empty;
