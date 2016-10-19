@@ -153,7 +153,8 @@ namespace SimpleDatabaseBackup
                     //MessageBox.Show("Database is modified. " + e.Database.Modified);
                     string SourceFile = string.Empty;
                     string SourceFileName = string.Empty;
-                    string BackupFile = string.Empty;
+                    string BackupFile = string.Empty; //Just the backup file filename (without path)
+                    string BackupFilePath = string.Empty; //The complete path and filename
                     SourceFileName = GetSourceFileName(e);
                     if (e.Database.IOConnectionInfo.IsLocalFile())
                     {
@@ -190,8 +191,9 @@ namespace SimpleDatabaseBackup
                     if (Directory.Exists(destPath))
                     {
                         // create file
-                        BackupFile = destPath + "/" + SourceFileName + "_" + DateTime.Now.ToString("dd-MMMM-yyyy-hh-mm-ss") + ".kdbx";
-                        File.Copy(SourceFile, BackupFile, true);
+                        BackupFile = SourceFileName + "_" + DateTime.Now.ToString("dd-MMMM-yyyy-hh-mm-ss") + ".kdbx";
+                        BackupFilePath = destPath + "/" + BackupFile;
+                        File.Copy(SourceFile, BackupFilePath, true);
 
                         // delete extra file
                         if (LogFile != null)
@@ -200,6 +202,7 @@ namespace SimpleDatabaseBackup
                             {
                                 for (int LoopDelete = NumberOfBackups - 1; LoopDelete < LogFile.Length; LoopDelete++)
                                 {
+                                    //
                                     if (File.Exists(LogFile[LoopDelete]))
                                     {
                                         File.Delete(LogFile[LoopDelete]);
