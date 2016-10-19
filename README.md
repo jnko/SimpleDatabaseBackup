@@ -15,12 +15,15 @@ https://github.com/jnko/SimpleDatabaseBackup/raw/master/SimpleDatabaseBackup.plg
 At the moment it it hard-coded in the sources, but you may follow the excellent documentation on the KeePass website and build your own customized plugin. On the other hand you can create an issue here and I probably add this freature request.
 
 # Further information
-This plugin is heavily based on the DatabaseBackup plugin from Francis Noël which you can find here: http://keepass.info/plugins.html#databasebackup
+This plugin is heavily based on the DatabaseBackup plugin written by Francis Noël which you can find here: 
+
+http://keepass.info/plugins.html#databasebackup
+
 There is no license or copyright information left in the sources so I hope Franics allows me to re-use his code. If not, please leave me a note.
 
 I created this small plugin because I use KeePass daily with one personal and one shared business database. 
 Even not enough on I need to do this on cross-platform operating systems every day. People tend to make mistakes from time to time. That is the right moment for backups.
-At the time I only used Windows with Francis DatabaseBackup plugin everything was fine, but since I need to switch between Win, macOS and Linux I realized that Francis plugin doesn't play nicely in this scenario. It even has some serious bugs when using multiple databases.
+At the time I only used Windows with Francis DatabaseBackup plugin everything was fine, but since I need to switch between Windows, macOS and Linux I realized that Francis plugin doesn't play nicely. It has some serious bugs when using multiple databases and the path names were not cross-platform compatible. So I forked DatabaseBackup, removed the GUI, stripped out everything unneeded and modified it for my needs - cross-platform, simple, silent ==> SimpleDatabaseBackup
 
 # History
 * 1.0.4 Fixed a bug that prevents the entrie backup
