@@ -188,49 +188,53 @@ namespace SimpleDatabaseBackup
                         LogFile = File.ReadAllLines(BackupLogFile);
                     }
 
+
                     if (Directory.Exists(destPath))
                     {
-                        // create file
-                        BackupFile = SourceFileName + "_" + DateTime.Now.ToString("dd-MMMM-yyyy-hh-mm-ss") + ".kdbx";
-                        BackupFilePath = destPath + "/" + BackupFile;
-                        File.Copy(SourceFile, BackupFilePath, true);
-
-                        // delete extra file
-                        if (LogFile != null)
+                        if (File.Exists(SourceFile))
                         {
-                            if (LogFile.Length + 1 > NumberOfBackups)
+                            // create file
+                            BackupFile = SourceFileName + "_" + DateTime.Now.ToString("dd-MMMM-yyyy-hh-mm-ss") + ".kdbx";
+                            BackupFilePath = destPath + "/" + BackupFile;
+                            File.Copy(SourceFile, BackupFilePath, true);
+
+                            // delete extra file
+                            if (LogFile != null)
                             {
-                                for (int LoopDelete = NumberOfBackups - 1; LoopDelete < LogFile.Length; LoopDelete++)
+                                if (LogFile.Length + 1 > NumberOfBackups)
                                 {
-                                    //
-                                    if (File.Exists(LogFile[LoopDelete]))
+                                    for (int LoopDelete = NumberOfBackups - 1; LoopDelete < LogFile.Length; LoopDelete++)
                                     {
-                                        File.Delete(LogFile[LoopDelete]);
+                                        //
+                                        if (File.Exists(LogFile[LoopDelete]))
+                                        {
+                                            File.Delete(LogFile[LoopDelete]);
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        // write log file
-                        TextWriter fLog = new StreamWriter(BackupLogFile, false);
-                        fLog.WriteLine(BackupFile);
-                        if (LogFile != null)
-                        {
-                            var LoopMax = (uint)LogFile.Length;
-                            if (LoopMax > NumberOfBackups)
+                            // write log file
+                            TextWriter fLog = new StreamWriter(BackupLogFile, false);
+                            fLog.WriteLine(BackupFile);
+                            if (LogFile != null)
                             {
-                                LoopMax = (uint)NumberOfBackups;
+                                var LoopMax = (uint)LogFile.Length;
+                                if (LoopMax > NumberOfBackups)
+                                {
+                                    LoopMax = (uint)NumberOfBackups;
+                                }
+
+                                for (uint i = 0; i < LoopMax; i++)
+                                {
+                                    fLog.WriteLine(LogFile[i]);
+                                }
                             }
 
-                            for (uint i = 0; i < LoopMax; i++)
-                            {
-                                fLog.WriteLine(LogFile[i]);
-                            }
+                            fLog.Close();
+                            fLog.Dispose();
+                            fLog = null;
                         }
-
-                        fLog.Close();
-                        fLog.Dispose();
-                        fLog = null;
                     }
                     else
                     {
