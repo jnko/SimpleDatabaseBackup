@@ -26,6 +26,7 @@ Even not enough on I need to do this on cross-platform operating systems every d
 At the time I only used Windows with Francis DatabaseBackup plugin everything was fine, but since I need to switch between Windows, macOS and Linux I realized that Francis plugin doesn't play nicely. It has some serious bugs when using multiple databases and the path names were not cross-platform compatible. So I forked DatabaseBackup, removed the GUI, stripped out everything unneeded and modified it for my needs - cross-platform, simple, silent ==> SimpleDatabaseBackup
 
 # History
-* 1.0.4 Fixed a bug that prevents the entrie backup
+* 1.0.5 Fixed a bug which caused an unhandled exception when saving a new database.
+* 1.0.4 Fixed a bug that prevents the entrie backup.
 * 1.0.3 Added KeePass update notifications; A database will be backed-up only when modified.
 * 1.0.1 First public release.
