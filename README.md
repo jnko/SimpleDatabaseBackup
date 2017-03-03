@@ -1,5 +1,5 @@
 # SimpleDatabaseBackup
-SimpleDatabseBackup is a KeePass plugin which was created for simpleness. There is no setup, no GUI and no configuration. Just copy over the plugin into KeePess plugin folder and you are done.
+SimpleDatabseBackup is a KeePass plugin which was created for simpleness. There is no setup, no GUI and no configuration. Just install and go. That's all.
 
 # What is this plugin for?
 It will create a backup for every opened KeePass database (.kdbx) every time a database with changes is saved.
