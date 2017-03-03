@@ -1,7 +1,7 @@
 ﻿/*
   SimpleDatabaseBackup KeePass plugin
   
-  Copyright (C) 2016 Joern Koerner <joern.koerner@gmail.com>
+  Copyright (C) 2016,2017 Joern Koerner <joern.koerner@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -25,10 +25,11 @@ namespace SimpleDatabaseBackup
     using System.Net;
     using System.Net.Cache;
     using System.Windows.Forms;
+    using System.Collections.Generic;
 
     using KeePass.Plugins;
     using KeePass.Forms;
-
+    
     public sealed class SimpleDatabaseBackupExt : Plugin
     {
         private int NumberOfBackups = 5;    // This is the maximum number of backups to create for each opened database.
@@ -62,7 +63,6 @@ namespace SimpleDatabaseBackup
             // Important! Remove event handlers!
             this.m_host.MainWindow.FileSaving -= this.OnFileSaving;
         }
-
 
         public static string GetSourceFileName(FileSavingEventArgs e)
         {
@@ -110,38 +110,6 @@ namespace SimpleDatabaseBackup
             return SourceFileName;
         }
 
-        public static string GetLogFileName(FileSavingEventArgs e)
-        {
-            string SourceFileName = string.Empty;
-            if (e.Database.IOConnectionInfo.IsLocalFile())
-            {
-                // local file
-                var f = new FileInfo(e.Database.IOConnectionInfo.Path);
-                SourceFileName = f.Name;
-
-                f = null;
-            }
-            else
-            {
-                // remote file
-                SourceFileName = e.Database.IOConnectionInfo.Path;
-
-                int lastPosBack = SourceFileName.LastIndexOf("/");
-                if (lastPosBack > 0 && lastPosBack < SourceFileName.Length)
-                {
-                    SourceFileName = SourceFileName.Substring(lastPosBack + 1);
-                }
-
-                int lastPosSlash = SourceFileName.LastIndexOf(@"\");
-                if (lastPosSlash > 0 && lastPosSlash < SourceFileName.Length)
-                {
-                    SourceFileName = SourceFileName.Substring(lastPosSlash + 1);
-                }
-            }
-
-            return SourceFileName + "_log";
-        }
-
         private void OnFileSaving(object sender, FileSavingEventArgs e)
         {
             //Thats the way we do it!
@@ -153,7 +121,9 @@ namespace SimpleDatabaseBackup
                     //MessageBox.Show("Database is modified. " + e.Database.Modified);
                     string SourceFile = string.Empty;
                     string SourceFileName = string.Empty;
-                    string BackupFile = string.Empty; //Just the backup file filename (without path)
+                    string SourceFileNameAppend = "_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+                    string SourceFileNameExt = ".kdbx";
+                    string BackupFile = string.Empty;     //Just the backup file filename (without path)
                     string BackupFilePath = string.Empty; //The complete path and filename
                     SourceFileName = GetSourceFileName(e);
                     if (e.Database.IOConnectionInfo.IsLocalFile())
@@ -179,61 +149,51 @@ namespace SimpleDatabaseBackup
                         wc = null;
                     }
 
-                    // read log file
+                    
                     string destPath = Path.GetDirectoryName(e.Database.IOConnectionInfo.GetDisplayName()); // Destination backup folder is KeePass.exe directory
-                    string BackupLogFile = destPath + "/" + GetLogFileName(e);
-                    string[] LogFile = null;
-                    if (File.Exists(BackupLogFile))
-                    {
-                        LogFile = File.ReadAllLines(BackupLogFile);
-                    }
-
 
                     if (Directory.Exists(destPath))
                     {
                         if (File.Exists(SourceFile))
                         {
                             // create file
-                            BackupFile = SourceFileName + "_" + DateTime.Now.ToString("dd-MMMM-yyyy-hh-mm-ss") + ".kdbx";
+                            BackupFile = SourceFileName + SourceFileNameAppend + SourceFileNameExt;
                             BackupFilePath = destPath + "/" + BackupFile;
+                            // MessageBox.Show("Creating backup " + BackupFilePath);
                             File.Copy(SourceFile, BackupFilePath, true);
 
-                            // delete extra file
-                            if (LogFile != null)
+                            //Get all backup databases in path
+                            List<string> bakFiles = new List<string>();
+                            foreach (string file in Directory.GetFiles(destPath, SourceFileName + "_*.kdbx"))
                             {
-                                if (LogFile.Length + 1 > NumberOfBackups)
+                                bakFiles.Add(file);
+                            }
+
+                            //Clean up (delete) all old database backups
+                            bakFiles.Reverse();             //descending sort - newest on top
+
+                            /* Debug only
+                            string bf = "bakFiles: ";
+                            foreach (string bakFile in bakFiles)
+                            {
+                                bf = bf + " " + bakFile;
+                            }
+                            MessageBox.Show(bf);
+                            */
+
+                            int cnt = 0;
+                            foreach (string bakFile in bakFiles)
+                            {
+                                cnt++;
+                                if (cnt > NumberOfBackups)
                                 {
-                                    for (int LoopDelete = NumberOfBackups - 1; LoopDelete < LogFile.Length; LoopDelete++)
+                                    if (File.Exists(bakFile))
                                     {
-                                        //
-                                        if (File.Exists(LogFile[LoopDelete]))
-                                        {
-                                            File.Delete(LogFile[LoopDelete]);
-                                        }
+                                        File.Delete(bakFile);
                                     }
                                 }
                             }
 
-                            // write log file
-                            TextWriter fLog = new StreamWriter(BackupLogFile, false);
-                            fLog.WriteLine(BackupFile);
-                            if (LogFile != null)
-                            {
-                                var LoopMax = (uint)LogFile.Length;
-                                if (LoopMax > NumberOfBackups)
-                                {
-                                    LoopMax = (uint)NumberOfBackups;
-                                }
-
-                                for (uint i = 0; i < LoopMax; i++)
-                                {
-                                    fLog.WriteLine(LogFile[i]);
-                                }
-                            }
-
-                            fLog.Close();
-                            fLog.Dispose();
-                            fLog = null;
                         }
                     }
                     else
