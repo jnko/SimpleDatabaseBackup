@@ -29,10 +29,12 @@ This plugin is heavily based on the DatabaseBackup plugin written by Francis NoÃ
 
 http://keepass.info/plugins.html#databasebackup
 
-There is no license or copyright information left in the sources so I hope Franics allows me to re-use his code. If not, please leave me a note.
+There is no license or copyright information left in the original sources so I hope Franics allows me to re-use parts of his code. If not, please leave me a note.
 
 I created this small plugin because I use KeePass daily with one personal and one shared business database. 
-Even not enough on I need to do this on cross-platform operating systems every day. People tend to make mistakes from time to time. That is the right moment for backups.
+Even not enough on I need to do this on cross-platform operating systems every day. 
+People tend to make mistakes from time to time. That is the right moment for backups.
+
 At the time I only used Windows with Francis DatabaseBackup plugin everything was fine, but since I need to switch between Windows, macOS and Linux I realized that Francis plugin doesn't play nicely. It has some serious bugs when using multiple databases and the path names were not cross-platform compatible. So I forked DatabaseBackup, removed the GUI, stripped out everything unneeded and modified it for my needs - cross-platform, simple, silent ==> SimpleDatabaseBackup
 
 # History
