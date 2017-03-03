@@ -11,9 +11,16 @@ The compiled plugin can be downloaded here:
 
 https://github.com/jnko/SimpleDatabaseBackup/raw/master/SimpleDatabaseBackup.plgx
 
-# Installing the plugin
-Please follow the KeePass documentation
+# Installing SimpleDatabaseBackup plugin
+Please follow the KeePass documentation:
+
 http://keepass.info/help/v2/plugins.html
+
+In short unzip into the KeePass.exe folder.
+
+# Updating the SimpleDatabaseBackup plugin
+
+When updating the plugin please always manually remove the backup databases
 
 # Can I change the number of backups ?
 At the time of writing this it is hard-coded in the sources, but you may follow the excellent documentation on the KeePass website and build your own customized plugin. On the other hand you can create an issue here and if there is some need from the users I will add this freature request.
