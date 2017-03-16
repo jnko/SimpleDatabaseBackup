@@ -6,6 +6,9 @@ It will create a backup for every opened KeePass database (.kdbx) every time a d
 The backups will be placed in the databases source folder, with a maximum of 5 backups. The backups will be rotated, newest in, oldest out.
 SimpleDatabaseBackup is fully cross-platform compatible.
 
+**NOTE:**
+SimpleDatabaseBackup currently creates local backups only. Since most users having their database in some sort of local-to-cloud syncfolder that's ok because the backups are being synced by the cloud application. Remote databases (sftp, scp, ftps) are not supported currently. I'm working on this but this is more complicated and I've to do this on my spare time. Please be patient in this point...
+
 # Download
 The compiled plugin can be downloaded here: 
 
