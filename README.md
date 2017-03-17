@@ -17,7 +17,7 @@ https://github.com/jnko/SimpleDatabaseBackup/raw/master/SimpleDatabaseBackup.plg
 # Installing SimpleDatabaseBackup plugin
 Please follow the KeePass documentation: http://keepass.info/help/v2/plugins.html
 
-In short just put it into the KeePass.exe folder.
+In short: Just put it into the KeePass.exe folder.
 
 # Updating the SimpleDatabaseBackup plugin
 When updating the plugin please always manually remove the backup databases.
