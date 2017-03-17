@@ -15,9 +15,7 @@ The compiled plugin can be downloaded here:
 https://github.com/jnko/SimpleDatabaseBackup/raw/master/SimpleDatabaseBackup.plgx
 
 # Installing SimpleDatabaseBackup plugin
-Please follow the KeePass documentation:
-
-http://keepass.info/help/v2/plugins.html
+Please follow the KeePass documentation: http://keepass.info/help/v2/plugins.html
 
 In short just put it into the KeePass.exe folder.
 
