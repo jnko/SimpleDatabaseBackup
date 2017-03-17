@@ -19,7 +19,7 @@ Please follow the KeePass documentation:
 
 http://keepass.info/help/v2/plugins.html
 
-In short unzip into the KeePass.exe folder.
+In short just put it into the KeePass.exe folder.
 
 # Updating the SimpleDatabaseBackup plugin
 When updating the plugin please always manually remove the backup databases.
