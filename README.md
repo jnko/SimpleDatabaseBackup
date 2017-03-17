@@ -20,7 +20,8 @@ Please follow the KeePass documentation: http://keepass.info/help/v2/plugins.htm
 In short: Just put it into the KeePass.exe folder.
 
 # Updating the SimpleDatabaseBackup plugin
-When updating the plugin please always manually remove the backup databases.
+To update quit KeePass and overwrite the older release. That's all.
+After updating the plugin please always manually remove the backup databases.
 
 # Can I change the number of backups ?
 At the time of writing this the number of backups is hard-coded into the sources, but you may follow the excellent documentation on the KeePass website and build your own customized plugin or you can create an issue here and if there is some need from the users I will add this freature request.
