@@ -32,7 +32,9 @@ namespace SimpleDatabaseBackup
     
     public sealed class SimpleDatabaseBackupExt : Plugin
     {
-        private int NumberOfBackups = 5;    // This is the maximum number of backups to create for each opened database.
+        private int NumberOfBackups = 5;          // This is the maximum number of backups to create for each opened database.
+        private string backupPostfix = "_sdbackup";  // Somethig that is being added behind the filename "somefile_sdbackup" but before the extension "somefile_sdbackup.kdbx"
+        private string backupExt = ".kdbx";
         private IPluginHost m_host = null;
 
         public override string UpdateUrl
@@ -85,7 +87,7 @@ namespace SimpleDatabaseBackup
             {
                 // remote file
                 SourceFileName = e.Database.IOConnectionInfo.Path;
-
+                //MessageBox.Show(e.Database.IOConnectionInfo.Path);  //Complete URI
                 int lastPosBack = SourceFileName.LastIndexOf("/");
                 if (lastPosBack > 0 && lastPosBack < SourceFileName.Length)
                 {
@@ -106,7 +108,7 @@ namespace SimpleDatabaseBackup
                     SourceFileName = SourceFileName.Substring(0, lastPoitDot);
                 }
             }
-
+            //MessageBox.Show(SourceFileName);    //Filename w/o ext
             return SourceFileName;
         }
 
@@ -121,11 +123,11 @@ namespace SimpleDatabaseBackup
                     //MessageBox.Show("Database is modified. " + e.Database.Modified);
                     string SourceFile = string.Empty;
                     string SourceFileName = string.Empty;
-                    string SourceFileNameAppend = "_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-                    string SourceFileNameExt = ".kdbx";
+                    string DateAppend = "_"+DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
                     string BackupFile = string.Empty;     //Just the backup file filename (without path)
                     string BackupFilePath = string.Empty; //The complete path and filename
                     SourceFileName = GetSourceFileName(e);
+                  //MessageBox.Show("SFN: " + SourceFileName);  //Filename Only
                     if (e.Database.IOConnectionInfo.IsLocalFile())
                     {
                         SourceFile = e.Database.IOConnectionInfo.Path;
@@ -145,6 +147,7 @@ namespace SimpleDatabaseBackup
                         }
 
                         wc.DownloadFile(e.Database.IOConnectionInfo.Path, SourceFile);
+                        //MessageBox.Show("Downloaded_from:"+ e.Database.IOConnectionInfo.Path+ " To:"+ SourceFile+ " UN:PW"+ e.Database.IOConnectionInfo.UserName+ e.Database.IOConnectionInfo.Password);
                         wc.Dispose();
                         wc = null;
                     }
@@ -157,14 +160,14 @@ namespace SimpleDatabaseBackup
                         if (File.Exists(SourceFile))
                         {
                             // create file
-                            BackupFile = SourceFileName + SourceFileNameAppend + SourceFileNameExt;
+                            BackupFile = SourceFileName + backupPostfix + DateAppend + backupExt;
                             BackupFilePath = destPath + "/" + BackupFile;
                             // MessageBox.Show("Creating backup " + BackupFilePath);
                             File.Copy(SourceFile, BackupFilePath, true);
 
                             //Get all backup databases in path
                             List<string> bakFiles = new List<string>();
-                            foreach (string file in Directory.GetFiles(destPath, SourceFileName + "_*.kdbx"))
+                            foreach (string file in Directory.GetFiles(destPath, SourceFileName + backupPostfix + "*" + backupExt))
                             {
                                 bakFiles.Add(file);
                             }
