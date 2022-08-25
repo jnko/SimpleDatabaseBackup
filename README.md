@@ -15,7 +15,7 @@ The compiled plugin can be downloaded here:
 https://github.com/jnko/SimpleDatabaseBackup/raw/master/SimpleDatabaseBackup.plgx
 
 # Installing SimpleDatabaseBackup plugin
-Please follow the KeePass documentation: http://keepass.info/help/v2/plugins.html
+Please follow the KeePass documentation: https://keepass.info/help/v2/plugins.html
 
 In short: Just put it into the KeePass.exe folder.
 
@@ -29,7 +29,7 @@ At the time of writing this the number of backups is hard-coded into the sources
 # Further information
 This plugin is heavily based on the DatabaseBackup plugin written by Francis Noël which you can find here: 
 
-http://keepass.info/plugins.html#databasebackup
+https://keepass.info/plugins.html#databasebackup
 
 There is no license or copyright information left in the original sources so I hope Franics allows me to re-use parts of his code. If not, please leave me a note.
 
